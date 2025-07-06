@@ -18,6 +18,8 @@ public class RestaurantService {
     }
     public List<Restaurant> getRestaurantsNearLocation(double latitude, double longitude) {
         double[] boundingBox = getBoundingBox(latitude, longitude, 5);
+
+        //PUBLIC API OK TO COMMIT (NO AUTH)
         String apiUrl = String.format("https://overpass-api.de/api/interpreter?data=[out:json];node[\"amenity\"=\"restaurant\"](%f,%f,%f,%f);out;",
                 boundingBox[0], boundingBox[1], boundingBox[2], boundingBox[3]);
         return restTemplate.getForObject(apiUrl, RestaurantResponse.class).getElements();
