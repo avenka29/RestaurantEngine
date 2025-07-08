@@ -1,9 +1,12 @@
 package com.restaurantengine.restaurantengine.Services;
+import com.restaurantengine.restaurantengine.DTO.RestaurantDTO;
+import com.restaurantengine.restaurantengine.DTO.TagsDTO;
+import com.restaurantengine.restaurantengine.Model.OverpassResponse;
 import com.restaurantengine.restaurantengine.Model.Restaurant;
-import com.restaurantengine.restaurantengine.Model.RestaurantResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static java.lang.Math.*;
@@ -17,12 +20,26 @@ public class RestaurantService {
         this.restTemplate = restTemplate;
     }
     public List<Restaurant> getRestaurantsNearLocation(double latitude, double longitude) {
-        double[] boundingBox = getBoundingBox(latitude, longitude, 5);
+        List<RestaurantDTO> data = getRestaurantsHelper(latitude, longitude);
+        List<Restaurant> restaurants = new ArrayList<>();
+        for(RestaurantDTO restaurantDTO : data) {
+            TagsDTO tags = restaurantDTO.getTags();
+            restaurants.add(new Restaurant(restaurantDTO.getId(), restaurantDTO.getLat(),
+            restaurantDTO.getLon(), tags.getCity(), tags.getCountry(),
+                    tags.getState(), tags.getWebsite(),
+                    tags.getVegetarian(), tags.getHalal(),
+                    tags.getVegan(), tags.getName()));
+        }
 
+        return restaurants;
+    }
+
+    private List<RestaurantDTO> getRestaurantsHelper(double latitude, double longitude) {
+        double[] boundingBox = getBoundingBox(latitude, longitude, 5);
         //PUBLIC API OK TO COMMIT (NO AUTH)
         String apiUrl = String.format("https://overpass-api.de/api/interpreter?data=[out:json];node[\"amenity\"=\"restaurant\"](%f,%f,%f,%f);out;",
                 boundingBox[0], boundingBox[1], boundingBox[2], boundingBox[3]);
-        return restTemplate.getForObject(apiUrl, RestaurantResponse.class).getElements();
+        return restTemplate.getForObject(apiUrl, OverpassResponse.class).getElements();
     }
 
     private double[] getBoundingBox(double latitude, double longitude, int radius) {

@@ -42,6 +42,7 @@ public class UserService {
                                                      double longitude,
                                                      String password) {
         //PUBLIC API OK TO COMMIT (NO AUTH)
+        //TODO: add async functionality
         String url = String.format("https://nominatim.openstreetmap.org/reverse?lat=%f&lon=%f&format=json",
                 latitude, longitude);
         GeocodeResponse response = restTemplate.getForObject(url, GeocodeResponse.class);
