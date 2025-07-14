@@ -1,15 +1,20 @@
 package com.restaurantengine.restaurantengine.Model.Graph;
 
-public interface Graph <V, E> {
+import com.restaurantengine.restaurantengine.Model.Restaurant;
+import com.restaurantengine.restaurantengine.Model.User;
+
+public interface Graph {
 
     /**
      * Method for number of vertices in a graph
+     *
      * @return Integer of vertices in a graph
      */
-    int numVertices();
+    int numNodes();
 
     /**
      * Method for number of edges in a graph
+     *
      * @return Integer of edges in a graph
      */
     int numEdges();
@@ -17,6 +22,7 @@ public interface Graph <V, E> {
 
     /**
      * Method for number of restaurant nodes
+     *
      * @return Integer of restaurant nodes in a graph
      */
     int numRestaurants();
@@ -24,159 +30,87 @@ public interface Graph <V, E> {
 
     /**
      * Method for number of user nodes in graph
+     *
      * @return Integer of user nodes in graph
      */
     int numUsers();
 
 
     /**
-     * Returns the edge that exists between vertex1 and vertex2; if no edge exists
-     * from vertex1 to vertex2, return null
+     * Returns the edge that exists between a restaurant and a user
      *
-     * @param vertex1 an endpoint vertex; for a directed graph, the source vertex
-     * @param vertex2 an endpoint vertex; for a directed graph, the destination
-     *                vertex
-     * @return the edge that exists between vertex1 and vertex2
+     * @param node1 source (user node)
+     * @param node2 destination (restaurant node
+     * @return the edge that exists between a restaurant and a user
      */
-    Edge<E> getEdge(Vertex<V> vertex1, Vertex<V> vertex2);
+    Edge getEdge(UserNode node1, RestaurantNode node2);
 
 
     /**
-     * Returns an array that represents the two endpoint vertices of the given edge
+     * Returns the number of likes & dislikes for a user
      *
-     * @param edge the edge for which to retrieve endpoint vertices
-     * @return an array that represents the two endpoint vertices of the given edge
-     */
-    Vertex<V>[] endVertices(Edge<E> edge);
-
-
-    /**
-     * Given an edge and one of the edge's endpoint vertices, returns the remaining
-     * endpoint vertex
-     *
-     * @param vertex an endpoint vertex of the given edge
-     * @param edge   the edge for which to determine endpoint vertices
-     * @return the remaining endpoint vertex for the given edge
-     */
-    Vertex<V> opposite(Vertex<V> vertex, Edge<E> edge);
-
-
-    /**
-     * Returns the outdegree of the given vertex -- in other words, the number of
-     * edges that are 'leaving' the given vertex
-     *
-     * @param vertex the vertex for which to retrieve the outdegree
+     * @param user person's likes & dislikes to return
      * @return the outdegree of the given vertex
      */
-    int outDegree(Vertex<V> vertex);
+    int outDegree(UserNode user);
 
 
     /**
-     * Returns the indegree of the given vertex -- in other words, the number of
-     * edges that are 'entering' the given vertex
-     *
-     * @param vertex the vertex for which to retrieve the indegree
-     * @return the indegree of the given vertex
+     * The number of users who like a restaurant
+     * @param restaurant the vertex for which to retrieve the indegree
+     * @return the indegree of the given restaurant
      */
-    int inDegree(Vertex<V> vertex);
+    int inDegree(RestaurantNode restaurant);
 
 
     /**
-     * Returns an {@link Iterable} collection of outgoing edges for a given vertex
+     * Returns a collection of likes for a given user
      *
-     * @param vertex the vertex for which to retrieve outgoing edges
-     * @return an {@link Iterable} collection of outgoing edges for a given vertex
+     * @param user the vertex for which to retrieve like edges
+     * @return an {@link Iterable} collection of like edges for a given user
      */
-    Iterable<Edge<E>> outgoingEdges(Vertex<V> vertex);
-
+    Iterable<Edge> userLikes(UserNode user);
 
 
     /**
-     * Returns an {@link Iterable} collection of incoming edges for a given vertex
+     * Returns a collection of dislikes for a given user
      *
-     * @param vertex the vertex for which to retrieve incoming edges
-     * @return an {@link Iterable} collection of incomoing edges for a given vertex
+     * @param user the vertex for which to retrieve dislike edges
+     * @return an {@link Iterable} collection of dislike edges for a given user
      */
-    Iterable<Edge<E>> incomingEdges(Vertex<V> vertex);
+    Iterable<Edge> userDislikes(UserNode user);
 
 
     /**
-     * Adds a new user to the graph, and returns a reference to the vertex that
+     * Adds a new user to the graph, and returns a reference to the node that
      * was created
      *
-     * @param vertexData the data to store in the new vertex
-     * @return a reference to the newly created vertex
+     * @param user the data to store in the new node
+     * @return a reference to the newly created node
      */
-    Vertex<V> addUser(V vertexData);
+    UserNode addUser(User user);
 
 
     /**
-     * Adds a new restaurant to the graph, and returns a reference to the vertex that
+     * Adds a new restaurant to the graph, and returns a reference to the node that
      * was created
      *
-     * @param vertexData the data to store in the new vertex
-     * @return a reference to the newly created vertex
+     * @param restaurant the data to store in the new node
+     * @return a reference to the newly created node
      */
-    Vertex<V> addRestaurant(V vertexData);
-
+    RestaurantNode addRestaurant(Restaurant restaurant);
 
 
     /**
-     * Adds a new edge to the graph, and returns a reference to the edge that was
-     * created
+     * Adds a new interaction edge (e.g., like or dislike) from a user to a restaurant.
      *
-     * @param v1       for an undirected graph, one of the endpoint vertices; for a
-     *                 directed graph, the source vertex
-     * @param v2       for an undirected graph, one of the endpoint vertices; for a
-     *                 directed graph, the destination vertex
-     * @param edgeData the data to store in the new edge
-     * @return a reference to the newly created edge
+     * @param user The {@link UserNode} initiating the interaction.
+     * @param restaurant The {@link RestaurantNode} that is the subject of the interaction.
+     * @param interactionType A string defining the type of interaction (e.g., "LIKES", "DISLIKES").
+     * @return The newly created {@link Edge} representing the interaction.
      */
-    Edge<E> insertEdge(Vertex<V> v1, Vertex<V> v2, E edgeData);
+    Edge addInteraction(UserNode user, RestaurantNode restaurant, String interactionType);
 
-
-    /**
-     * Removes the given vertex from the graph. Also removes all of the vertex's
-     * incident (incoming and outgoing) edges from the graph.
-     *
-     * @param vertex the vertex to remove from the graph
-     */
-    void removeVertex(Vertex<V> vertex);
-
-
-    /**
-     * Removes the given edge from the graph.
-     *
-     * @param edge the edge to remove from the graph
-     */
-    void removeEdge(Edge<E> edge);
-
-
-    /**
-     * Represents a like/dislike
-     * @param <E> the type of data in the edge
-     */
-    interface Edge<E> {
-
-        /**
-         * Returns the value stored in the edge
-         * @return like or dislike
-         */
-        E getElement();
-    }
-
-    /**
-     * Represents a restaurant or user in a Graph
-     * @param <V> the type of data in the vertex
-     */
-    interface Vertex<V> {
-
-        /**
-         * Returns the element stored in the vertex
-         * @return the user or restaurant stored in the vertex
-         */
-        V getElement();
-    }
 
 
 
