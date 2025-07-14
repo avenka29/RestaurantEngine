@@ -1,4 +1,4 @@
-package com.restaurantengine.restaurantengine.Model.Graph;
+package com.restaurantengine.restaurantengine.Model.Graph.Node;
 
 public interface Node {
 

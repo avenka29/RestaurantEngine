@@ -1,5 +1,7 @@
 package com.restaurantengine.restaurantengine.Model.Graph;
 
+import com.restaurantengine.restaurantengine.Model.Graph.Node.RestaurantNode;
+import com.restaurantengine.restaurantengine.Model.Graph.Node.UserNode;
 import com.restaurantengine.restaurantengine.Model.Restaurant;
 import com.restaurantengine.restaurantengine.Model.User;
 
@@ -45,22 +47,12 @@ public interface Graph {
      */
     Edge getEdge(UserNode node1, RestaurantNode node2);
 
-
-    /**
-     * Returns the number of likes & dislikes for a user
-     *
-     * @param user person's likes & dislikes to return
-     * @return the outdegree of the given vertex
-     */
-    int outDegree(UserNode user);
-
-
-    /**
-     * The number of users who like a restaurant
-     * @param restaurant the vertex for which to retrieve the indegree
-     * @return the indegree of the given restaurant
-     */
-    int inDegree(RestaurantNode restaurant);
+//    /**
+//     * The number of users who like a restaurant
+//     * @param restaurant the vertex for which to retrieve the indegree
+//     * @return the indegree of the given restaurant
+//     */
+//    int users(RestaurantNode restaurant);
 
 
     /**
@@ -106,10 +98,10 @@ public interface Graph {
      *
      * @param user The {@link UserNode} initiating the interaction.
      * @param restaurant The {@link RestaurantNode} that is the subject of the interaction.
-     * @param interactionType A string defining the type of interaction (e.g., "LIKES", "DISLIKES").
+     * @param interactionType An enumerated value defining the type of interaction (e.g., "LIKE", "DISLIKE").
      * @return The newly created {@link Edge} representing the interaction.
      */
-    Edge addInteraction(UserNode user, RestaurantNode restaurant, String interactionType);
+    Edge addInteraction(UserNode user, RestaurantNode restaurant, InteractionType interactionType);
 
 
 

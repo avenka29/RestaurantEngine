@@ -1,8 +1,8 @@
-package com.restaurantengine.restaurantengine.Model.Graph;
+package com.restaurantengine.restaurantengine.Model.Graph.Node;
 
 import com.restaurantengine.restaurantengine.Model.Restaurant;
 
-public class RestaurantNode implements Node{
+public class RestaurantNode implements Node {
 
     private Restaurant restaurant;
 

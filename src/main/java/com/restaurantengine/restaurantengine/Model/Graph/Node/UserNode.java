@@ -1,4 +1,4 @@
-package com.restaurantengine.restaurantengine.Model.Graph;
+package com.restaurantengine.restaurantengine.Model.Graph.Node;
 
 import com.restaurantengine.restaurantengine.Model.User;
 
@@ -6,7 +6,7 @@ import com.restaurantengine.restaurantengine.Model.User;
 /**
  * Represents a user node in the graph
  */
-public class UserNode implements Node{
+public class UserNode implements Node {
 
 
     private User user;
