@@ -58,19 +58,19 @@ public interface Graph {
     /**
      * Returns a collection of likes for a given user
      *
-     * @param user the vertex for which to retrieve like edges
+     * @param user for which to retrieve like edges
      * @return an {@link Iterable} collection of like edges for a given user
      */
-    Iterable<Edge> userLikes(UserNode user);
+    Iterable<Edge> userLikes(User user);
 
 
     /**
      * Returns a collection of dislikes for a given user
      *
-     * @param user the vertex for which to retrieve dislike edges
+     * @param user for which to retrieve dislike edges
      * @return an {@link Iterable} collection of dislike edges for a given user
      */
-    Iterable<Edge> userDislikes(UserNode user);
+    Iterable<Edge> userDislikes(User user);
 
 
     /**
@@ -101,7 +101,7 @@ public interface Graph {
      * @param interactionType An enumerated value defining the type of interaction (e.g., "LIKE", "DISLIKE").
      * @return The newly created {@link Edge} representing the interaction.
      */
-    Edge addInteraction(UserNode user, RestaurantNode restaurant, InteractionType interactionType);
+    Edge addInteraction(User user, Restaurant restaurant, InteractionType interactionType);
 
 
 

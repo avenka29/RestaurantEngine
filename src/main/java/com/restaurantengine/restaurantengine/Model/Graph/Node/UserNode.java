@@ -6,6 +6,7 @@ import com.restaurantengine.restaurantengine.Model.User;
 /**
  * Represents a user node in the graph
  */
+//TODO: Override equals method
 public class UserNode implements Node {
 
 

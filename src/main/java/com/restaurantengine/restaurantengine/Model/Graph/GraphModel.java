@@ -13,24 +13,29 @@ import java.util.List;
 //TODO improve input validating and error handling
 public class GraphModel implements Graph{
 
-    private int userCount;
-    private int restaurantCount;
+//    private int userCount;
+//    private int restaurantCount;
     private int edgeCount;
+
+    private Map<User, UserNode> userNodes;
+    private Map<Restaurant, RestaurantNode> restaurantNodes;
     private Map<UserNode, List<Edge>> userMap;
     private Map<RestaurantNode, List<Edge>> restaurantMap;
 
     public GraphModel() {
-        userCount = 0;
-        restaurantCount = 0;
+//        userCount = 0;
+//        restaurantCount = 0;
         edgeCount = 0;
         userMap = new HashMap<>();
         restaurantMap = new HashMap<>();
+        userNodes = new HashMap<>();
+        restaurantNodes = new HashMap<>();
     }
 
 
     @Override
     public int numNodes() {
-        return userCount + restaurantCount;
+        return userNodes.size() + restaurantNodes.size();
     }
 
     @Override
@@ -40,12 +45,12 @@ public class GraphModel implements Graph{
 
     @Override
     public int numRestaurants() {
-        return restaurantCount;
+        return restaurantNodes.size();
     }
 
     @Override
     public int numUsers() {
-        return userCount;
+        return userNodes.size();
     }
 
     @Override
@@ -68,9 +73,10 @@ public class GraphModel implements Graph{
 //    }
 
     @Override
-    public Iterable<Edge> userLikes(UserNode user) {
+    public Iterable<Edge> userLikes(User user) {
+        UserNode userNode = userNodes.get(user);
         List<Edge> edges = new ArrayList<>();
-        for(Edge edge : userMap.get(user)) {
+        for(Edge edge : userMap.get(userNode)) {
             if(edge.getType() == InteractionType.LIKE){
                 edges.add(edge);
             }
@@ -79,9 +85,10 @@ public class GraphModel implements Graph{
     }
 
     @Override
-    public Iterable<Edge> userDislikes(UserNode user) {
+    public Iterable<Edge> userDislikes(User user) {
+        UserNode userNode = userNodes.get(user);
         List<Edge> edges = new ArrayList<>();
-        for(Edge edge : userMap.get(user)) {
+        for(Edge edge : userMap.get(userNode)) {
             if(edge.getType() == InteractionType.DISLIKE){
                 edges.add(edge);
             }
@@ -92,25 +99,34 @@ public class GraphModel implements Graph{
     @Override
     public UserNode addUser(User user) {
         UserNode userNode = new UserNode(user);
+        userNodes.put(user, userNode);
         userMap.put(userNode, new ArrayList<>());
-        userCount++;
         return userNode;
     }
 
     @Override
     public RestaurantNode addRestaurant(Restaurant restaurant) {
         RestaurantNode restaurantNode = new RestaurantNode(restaurant);
+        restaurantNodes.put(restaurant, restaurantNode);
         restaurantMap.put(restaurantNode, new ArrayList<>());
-        restaurantCount++;
         return restaurantNode;
     }
 
     @Override
-    public Edge addInteraction(UserNode user, RestaurantNode restaurant, InteractionType interactionType) {
-        Edge edge = new Edge(user, restaurant, interactionType);
+    public Edge addInteraction(User user, Restaurant restaurant, InteractionType interactionType) {
+        UserNode userNode = userNodes.get(user);
+        RestaurantNode restaurantNode = restaurantNodes.get(restaurant);
+        Edge edge = new Edge(userNode, restaurantNode, interactionType);
         edgeCount++;
-        userMap.get(user).add(edge);
-        restaurantMap.get(restaurant).add(edge);
+        userMap.get(userNode).add(edge);
+        restaurantMap.get(restaurantNode).add(edge);
         return edge;
+    }
+
+    public  List<Restaurant> getRecommendations(User user){
+        UserNode userNode = userNodes.get(user);
+        List<Restaurant> recommendations = new ArrayList<>();
+
+        return recommendations;
     }
 }
