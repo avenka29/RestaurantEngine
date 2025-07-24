@@ -64,13 +64,13 @@ public interface Graph {
     Iterable<Edge> userLikes(User user);
 
 
-    /**
-     * Returns a collection of dislikes for a given user
-     *
-     * @param user for which to retrieve dislike edges
-     * @return an {@link Iterable} collection of dislike edges for a given user
-     */
-    Iterable<Edge> userDislikes(User user);
+//    /**
+//     * Returns a collection of dislikes for a given user
+//     *
+//     * @param user for which to retrieve dislike edges
+//     * @return an {@link Iterable} collection of dislike edges for a given user
+//     */
+//    Iterable<Edge> userDislikes(User user);
 
 
     /**

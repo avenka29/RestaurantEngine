@@ -1,14 +1,12 @@
 package com.restaurantengine.restaurantengine.Model.Graph;
 
+import com.restaurantengine.restaurantengine.Model.Graph.Node.Node;
 import com.restaurantengine.restaurantengine.Model.Graph.Node.RestaurantNode;
 import com.restaurantengine.restaurantengine.Model.Graph.Node.UserNode;
 import com.restaurantengine.restaurantengine.Model.Restaurant;
 import com.restaurantengine.restaurantengine.Model.User;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.List;
+import java.util.*;
 
 //TODO improve input validating and error handling
 public class GraphModel implements Graph{
@@ -84,17 +82,17 @@ public class GraphModel implements Graph{
         return edges;
     }
 
-    @Override
-    public Iterable<Edge> userDislikes(User user) {
-        UserNode userNode = userNodes.get(user);
-        List<Edge> edges = new ArrayList<>();
-        for(Edge edge : userMap.get(userNode)) {
-            if(edge.getType() == InteractionType.DISLIKE){
-                edges.add(edge);
-            }
-        }
-        return edges;
-    }
+//    @Override
+//    public Iterable<Edge> userDislikes(User user) {
+//        UserNode userNode = userNodes.get(user);
+//        List<Edge> edges = new ArrayList<>();
+//        for(Edge edge : userMap.get(userNode)) {
+//            if(edge.getType() == InteractionType.DISLIKE){
+//                edges.add(edge);
+//            }
+//        }
+//        return edges;
+//    }
 
     @Override
     public UserNode addUser(User user) {
@@ -123,10 +121,42 @@ public class GraphModel implements Graph{
         return edge;
     }
 
-    public  List<Restaurant> getRecommendations(User user){
+    // TODO: Add depth limit to ensure dfs doesn't go too far
+    /**
+     * DFS implementation to find users that like the same restaurants
+     * @param user User to match
+     * @return List of similar users
+     */
+    public List<User> getSimilarUsers(User user){
         UserNode userNode = userNodes.get(user);
-        List<Restaurant> recommendations = new ArrayList<>();
+        List<User> similarUsers = new ArrayList<>();
 
-        return recommendations;
+        Stack<Node> stack = new Stack<>();
+        Set<Node> visited = new HashSet<>();
+        stack.push(userNode);
+        while(!stack.isEmpty()){
+            Node currentNode = stack.pop();
+            if(currentNode instanceof UserNode){
+                for(Edge likes: userMap.get((UserNode) currentNode)){
+                    RestaurantNode restaurantEdge = likes.getRestaurant();
+                    if(!visited.contains(restaurantEdge)){
+                        stack.push(restaurantEdge);
+                        visited.add(restaurantEdge);
+                    }
+                }
+            }
+            else if(currentNode instanceof RestaurantNode){
+                for(Edge users: restaurantMap.get((RestaurantNode) currentNode)){
+                    UserNode userEdge = users.getUser();
+                    if(!visited.contains(userEdge) && !userEdge.getElement().equals(user)){
+                        stack.push(userEdge);
+                        visited.add(userEdge);
+                        similarUsers.add(userEdge.getElement());
+
+                    }
+                }
+            }
+        }
+        return similarUsers;
     }
 }
